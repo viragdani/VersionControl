@@ -28,8 +28,8 @@ namespace UserMaintenance
         private void button1_Click(object sender, EventArgs e)
         {
             User u = new User();
-            u.LastName = textBox2.Text;
-            u.FirstName = textBox1.Text;
+            u.LastName = textBox1.Text;
+            u.FirstName = textBox2.Text;
             users.Add(u);
         }
     }
