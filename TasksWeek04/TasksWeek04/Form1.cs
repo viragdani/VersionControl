@@ -106,6 +106,28 @@ namespace TasksWeek04
             xlSheet.get_Range(
              GetCell(2, 1),
              GetCell(1 + values.GetLength(0), values.GetLength(1))).Value2 = values;
+
+            //Formázások
+            int lastRowID = xlSheet.UsedRange.Rows.Count;
+                //Range-k
+            Excel.Range headerRange = xlSheet.get_Range(GetCell(1, 1), GetCell(1, headers.Length));
+            Excel.Range tableRange = xlSheet.get_Range(GetCell(1, 1), GetCell(lastRowID, headers.Length));
+            Excel.Range lastcolRange = xlSheet.get_Range(GetCell(1, headers.Length), GetCell(lastRowID, headers.Length));
+            Excel.Range firstcolRange = xlSheet.get_Range(GetCell(1, 1), GetCell(lastRowID, 1));
+                //Tulajdonságok
+            headerRange.Font.Bold = true;
+            headerRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+            headerRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            headerRange.EntireColumn.AutoFit();
+            headerRange.RowHeight = 40;
+            headerRange.Interior.Color = Color.LightBlue;
+            headerRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+            tableRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+            firstcolRange.Font.Bold = true;
+            firstcolRange.Interior.Color = Color.LightYellow;
+            lastcolRange.Interior.Color = Color.LightGreen;
+            lastcolRange.NumberFormat = "#,###,###.00";
+
         }
         private string GetCell(int x, int y)
         {
