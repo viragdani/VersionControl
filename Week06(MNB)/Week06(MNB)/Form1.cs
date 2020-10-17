@@ -21,6 +21,11 @@ namespace Week06_MNB_
         public Form1()
         {
             InitializeComponent();
+            RefreshData();
+        }
+        private void RefreshData()
+        {
+            Rates.Clear();
             CallWebservice();
             dataGridView1.DataSource = Rates;
             XmlProcessing();
@@ -40,14 +45,13 @@ namespace Week06_MNB_
             chartArea.AxisY.MajorGrid.Enabled = false;
             chartArea.AxisY.IsStartedFromZero = false;
         }
-
         private void CallWebservice() 
         {
             MNBArfolyamServiceSoapClient mnbService = new MNBArfolyamServiceSoapClient();
             GetExchangeRatesRequestBody request = new GetExchangeRatesRequestBody();
-            request.currencyNames = "EUR";
-            request.startDate = "2020-01-01";
-            request.endDate = "2020-06-30";
+            request.currencyNames = comboBox1.SelectedItem.ToString();
+            request.startDate = dateTimePicker1.Value.ToString();
+            request.endDate = dateTimePicker2.Value.ToString();
             var response=mnbService.GetExchangeRates(request);
             result=response.GetExchangeRatesResult;
         }
@@ -78,6 +82,20 @@ namespace Week06_MNB_
                     rate.Value = value / unit;
             }
         }
-        
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
     }
 }
