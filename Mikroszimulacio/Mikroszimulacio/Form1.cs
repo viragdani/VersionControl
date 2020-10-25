@@ -17,13 +17,29 @@ namespace Mikroszimulacio
         List<Person> Population = new List<Person>();
         List<BirthProbability> BirthProbabilities = new List<BirthProbability>();
         List<DeathProbability> DeathProbabilities = new List<DeathProbability>();
+        Random rnd = new Random(1999);
         public Form1()
         {
             InitializeComponent();
             Population = GetPopulation(@"E:\Mikroszimulacio\nép.csv");
             BirthProbabilities = GetBirthProb(@"E:\Mikroszimulacio\születés.csv");
             DeathProbabilities = GetDeathProb(@"E:\Mikroszimulacio\halál.csv");
-            dataGridView1.DataSource = Population;
+            for (int year = 2005; year < 2025; year++)
+            {
+                for (int i = 0; i < Population.Count; i++)
+                {
+
+                }
+
+                int NbrOfMales = (from x in Population
+                                  where x.Gender == Gender.Male && x.IsAlive == true
+                                  select x).Count();
+                int NbrOfFemales = (from x in Population
+                                  where x.Gender == Gender.Female && x.IsAlive == true
+                                  select x).Count();
+                Console.WriteLine(
+                string.Format("Év:{0} Fiúk:{1} Lányok:{2}", year, NbrOfMales, NbrOfFemales));
+            }
         }
         public List<Person> GetPopulation(string csvpath)
         {
