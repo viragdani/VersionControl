@@ -18,28 +18,16 @@ namespace Mikroszimulacio
         List<BirthProbability> BirthProbabilities = new List<BirthProbability>();
         List<DeathProbability> DeathProbabilities = new List<DeathProbability>();
         Random rnd = new Random(1999);
+        List<Person> Malepop = new List<Person>();
+        List<Person> Femalepop = new List<Person>();
+        int publicyear;
         public Form1()
         {
             InitializeComponent();
-            Population = GetPopulation(@"E:\Mikroszimulacio\nép.csv");
+            Population = GetPopulation(textBox1.Text);
             BirthProbabilities = GetBirthProb(@"E:\Mikroszimulacio\születés.csv");
             DeathProbabilities = GetDeathProb(@"E:\Mikroszimulacio\halál.csv");
-            for (int year = 2005; year < 2025; year++)
-            {
-                for (int i = 0; i < Population.Count; i++)
-                {
-                    SimStep(year,Population[i]);
-                }
-
-                int NbrOfMales = (from x in Population
-                                  where x.Gender == Gender.Male && x.IsAlive == true
-                                  select x).Count();
-                int NbrOfFemales = (from x in Population
-                                  where x.Gender == Gender.Female && x.IsAlive == true
-                                  select x).Count();
-                Console.WriteLine(
-                string.Format("Év:{0} Fiúk:{1} Lányok:{2}", year, NbrOfMales, NbrOfFemales));
-            }
+            
         }
         public List<Person> GetPopulation(string csvpath)
         {
@@ -103,6 +91,14 @@ namespace Mikroszimulacio
             //Ha halott akkor kihagyjuk, ugrunk a ciklus következő lépésére
             if (!person.IsAlive) return;
 
+            if (person.Gender == Gender.Male)
+            {
+                Malepop.Add(person);
+            }
+            else
+            {
+                Femalepop.Add(person);
+            }
             // Letároljuk az életkort, hogy ne kelljen mindenhol újraszámolni
             int age = (int)(year - person.BirthYear);
 
@@ -113,8 +109,19 @@ namespace Mikroszimulacio
                              select x.DProbability).FirstOrDefault();
             // Meghal a személy?
             if (rnd.NextDouble() <= pDeath)
+            {
                 person.IsAlive = false;
+                if (person.Gender==Gender.Male)
+                {
+                    Malepop.Remove(person);
+                }
+                else
+                {
+                    Femalepop.Remove(person);
+                }
+            }
 
+            
             //Születés kezelése - csak az élő nők szülnek
             if (person.IsAlive && person.Gender == Gender.Female)
             {
@@ -132,6 +139,50 @@ namespace Mikroszimulacio
                     Population.Add(újszülött);
                 }
             }
+        }
+        private void Simulation()
+        {
+            Malepop.Clear();
+            Femalepop.Clear();
+            richTextBox1.Clear();
+            for (int year = 2005; year < numericUpDown1.Value; year++)
+            {
+                publicyear = year;
+                for (int i = 0; i < Population.Count; i++)
+                {
+                    SimStep(year, Population[i]);
+                    DisplayResults();
+                }
+
+                int NbrOfMales = (from x in Population
+                                  where x.Gender == Gender.Male && x.IsAlive == true
+                                  select x).Count();
+                int NbrOfFemales = (from x in Population
+                                    where x.Gender == Gender.Female && x.IsAlive == true
+                                    select x).Count();
+                Console.WriteLine(
+                string.Format("Év:{0} Fiúk:{1} Lányok:{2}", year, NbrOfMales, NbrOfFemales));
+            }
+        }
+
+        private void buttonStart_Click(object sender, EventArgs e)
+        {
+            Simulation();
+            
+        }
+        private void buttonBrowse_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.ShowDialog();
+            if (ofd.ShowDialog()==DialogResult.OK)
+            {
+                textBox1.Text = ofd.FileName;
+            }
+        }
+        private void DisplayResults()
+        {
+
+                richTextBox1.Text = richTextBox1+("Szimulációs év: " + publicyear.ToString() + "/n" + "/t" + "Fiúk: " + Malepop.Count.ToString() + "/n" + "/t" + "Lányok: " + Femalepop.Count.ToString()+"/n"+"/n");
         }
     }
 }
