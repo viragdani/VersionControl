@@ -76,5 +76,17 @@ namespace Futoszalag_8.het
             _nextToy.Top = label1.Top + 40;
             Controls.Add(_nextToy);
         }
+
+        private void btnColor1_Click(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+            var ColorPicker = new ColorDialog();
+            ColorPicker.Color = btnColor1.BackColor;
+            if (ColorPicker.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            button.BackColor = ColorPicker.Color;
+        }
     }
 }
