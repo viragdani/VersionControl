@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Futoszalag_8.het.Entitites
 {
-    class Ball:Label
+    public class Ball:Label
     {
         public Ball()
         {

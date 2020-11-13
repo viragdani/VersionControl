@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Futoszalag_8.het.Entitites
 {
-    class BallFactory
+    public class BallFactory
     {
         public Ball CreateNew()
         {
