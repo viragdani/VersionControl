@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Futoszalag_8.het.Abstractions
 {
-    public interface IToyInterface
+    public interface IToyFactory
+
     {
         Toy CreateNew();
     }

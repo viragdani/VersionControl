@@ -28,7 +28,7 @@ namespace Futoszalag_8.het
 
         private void createTimer_Tick(object sender, EventArgs e)
         {
-            Ball b = Factory.CreateNew();
+            Ball b = (Ball)Factory.CreateNew();
             _balls.Add(b);
             mainPanel.Controls.Add(b);
             b.Left = -b.Width;
