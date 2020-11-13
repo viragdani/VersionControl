@@ -14,17 +14,20 @@ namespace Futoszalag_8.het
 {
     public partial class Form1 : Form
     {
+        Toy _nextToy;
         List<Toy> _toys = new List<Toy>();
         private IToyFactory _factory;
         public IToyFactory Factory
         {
             get { return _factory; }
-            set { _factory = value; }
+            set { _factory = value;
+                DisplayNext();
+            }
         }
         public Form1()
         {
             InitializeComponent();
-            Factory = new CarFactory();
+            
         }
 
         private void createTimer_Tick(object sender, EventArgs e)
@@ -33,6 +36,7 @@ namespace Futoszalag_8.het
             _toys.Add(t);
             mainPanel.Controls.Add(t);
             t.Left = -t.Width;
+            t.Top = mainPanel.Height - t.Width;
         }
 
         private void conveyorTimer_Tick(object sender, EventArgs e)
@@ -51,6 +55,26 @@ namespace Futoszalag_8.het
                 mainPanel.Controls.Remove(oldestToy);
                 _toys.Remove(oldestToy);
             }
+        }
+
+        private void btnCar_Click(object sender, EventArgs e)
+        {
+            Factory = new CarFactory();
+        }
+
+        private void btnBall_Click(object sender, EventArgs e)
+        {
+            Factory = new BallFactory();
+        }
+        private void DisplayNext()
+        {
+            if (_nextToy!=null)
+            {
+                Controls.Remove(_nextToy);
+            }
+            _nextToy = Factory.CreateNew();
+            _nextToy.Top = label1.Top + 40;
+            Controls.Add(_nextToy);
         }
     }
 }
