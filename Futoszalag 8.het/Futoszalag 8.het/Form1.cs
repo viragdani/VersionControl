@@ -64,7 +64,8 @@ namespace Futoszalag_8.het
 
         private void btnBall_Click(object sender, EventArgs e)
         {
-            Factory = new BallFactory();
+            Factory = new BallFactory { BallColor = btnColor1.BackColor };
+            
         }
         private void DisplayNext()
         {
